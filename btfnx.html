@@ -1,0 +1,24 @@
+<html>
+<div id="btc"></div>
+<script>
+
+var ws = new WebSocket("wss://api.bitfinex.com/ws");
+
+ws.onopen = function(omsg1){
+	ws.send(JSON.stringify({"event":"subscribe", "channel":"ticker", "pair":"BTCUSD"}));	
+};
+
+ws.onmessage = function(msg1){
+	var response = JSON.parse(msg1.data);
+	if (response[1] != "hb"){
+		document.getElementById("btc").innerHTML = "Bitcoin - " +
+		"<br> Bid: " + "$" + response[1] + 
+		"<br> Ask: " + "$" + response[3] + 		
+		"<br> Daily High: " + "$" + response[9] + 
+		"<br> Daily Low: " + "$" + response[10] +
+		"<br> Daily Change: " + "$" + response[5] + " "+ "(" + (response[6] * 100) + "%" + ")";
+	}
+};
+
+</script>
+</html>
